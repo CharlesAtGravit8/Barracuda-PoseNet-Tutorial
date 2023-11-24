@@ -30,6 +30,8 @@ public class PoseEstimator : MonoBehaviour
     [Tooltip("The screen for viewing preprocessed images")]
     public Transform videoScreen;
 
+    public VideoPlayer videoScreenPlayer;
+
     [Tooltip("The ComputeShader that will perform the model-specific preprocessing")]
     public ComputeShader posenetShader;
 
@@ -151,10 +153,10 @@ public class PoseEstimator : MonoBehaviour
     private void InitializeVideoScreen(int width, int height, bool mirrorScreen)
     {
         // Set the render mode for the video player
-        videoScreen.GetComponent<VideoPlayer>().renderMode = VideoRenderMode.RenderTexture;
+        videoScreenPlayer.renderMode = VideoRenderMode.RenderTexture;
 
         // Use new videoTexture for Video Player
-        videoScreen.GetComponent<VideoPlayer>().targetTexture = videoTexture;
+        videoScreenPlayer.targetTexture = videoTexture;
 
         if (mirrorScreen)
         {
@@ -252,7 +254,7 @@ public class PoseEstimator : MonoBehaviour
         if (useWebcam)
         {
             // Limit application framerate to the target webcam framerate
-            Application.targetFrameRate = webcamFPS;
+            //Application.targetFrameRate = webcamFPS;
 
             // Create a new WebCamTexture
             webcamTexture = new WebCamTexture(webcamDims.x, webcamDims.y, webcamFPS);
@@ -261,7 +263,7 @@ public class PoseEstimator : MonoBehaviour
             webcamTexture.Play();
 
             // Deactivate the Video Player
-            videoScreen.GetComponent<VideoPlayer>().enabled = false;
+            videoScreenPlayer.enabled = false;
 
             // Update the videoDims.y
             videoDims.y = webcamTexture.height;
@@ -271,9 +273,9 @@ public class PoseEstimator : MonoBehaviour
         else
         {
             // Update the videoDims.y
-            videoDims.y = (int)videoScreen.GetComponent<VideoPlayer>().height;
+            videoDims.y = (int)videoScreenPlayer.height;
             // Update the videoDims.x
-            videoDims.x = (int)videoScreen.GetComponent<VideoPlayer>().width;
+            videoDims.x = (int)videoScreenPlayer.width;
         }
 
         // Create a new videoTexture using the current video dimensions
@@ -379,6 +381,8 @@ public class PoseEstimator : MonoBehaviour
 
         // Calculate the stride used to scale down the inputImage
         int stride = (imageDims.y - 1) / (heatmaps.shape.height - 1);
+
+        // Aligning stride to a Multiple of 8
         stride -= (stride % 8);
 
         if (estimationType == EstimationType.SinglePose)
