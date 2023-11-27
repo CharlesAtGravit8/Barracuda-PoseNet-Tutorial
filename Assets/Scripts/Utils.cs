@@ -15,12 +15,14 @@ public class Utils
         public float score;
         public Vector2 position;
         public int id;
+        public bool active;
 
-        public Keypoint(float score, Vector2 position, int id)
+        public Keypoint(float score, Vector2 position, int id, bool active)
         {
             this.score = score;
             this.position = position;
             this.id = id;
+            this.active = active;
         }
     }
 
@@ -249,7 +251,7 @@ public class Utils
         // Calculate the position for the displaced keypoint
         Vector2 targetKeypoint = (displacedPointIndices * stride) + offsetVector;
 
-        return new Keypoint(score, targetKeypoint, targetKeypointId);
+        return new Keypoint(score, targetKeypoint, targetKeypointId, true);
     }
 
 
@@ -273,7 +275,7 @@ public class Utils
         // Start a new detection instance at the position of the root.
         Vector2 rootPoint = GetImageCoords(root, stride, offsets);
 
-        instanceKeypoints[root.id] = new Keypoint(root.score, rootPoint, root.id);
+        instanceKeypoints[root.id] = new Keypoint(root.score, rootPoint, root.id, true);
 
         int numEdges = parentChildrenTuples.Length;
 
@@ -400,7 +402,7 @@ public class Utils
                     // Only add keypoints with the highest score in a local window.
                     if (ScoreIsMaximumInLocalWindow(c, score, y, x, localMaximumRadius, heatmaps))
                     {
-                        list.Add(new Keypoint(score, new Vector2(x, y), c));
+                        list.Add(new Keypoint(score, new Vector2(x, y), c, true));
                     }
                 }
             }

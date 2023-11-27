@@ -137,10 +137,11 @@ public class PoseEstimator : MonoBehaviour
 
     // Stores the current estimated 2D keypoint locations in videoTexture
     private Utils.Keypoint[][] poses;
+    public Utils.Keypoint[][] Poses => poses;
 
     // Array of pose skeletons
     private PoseSkeleton[] skeletons;
-
+    public PoseSkeleton[] Skeletons => skeletons;
 
     /// <summary>
     /// Prepares the videoScreen GameObject to display the chosen video source.
@@ -410,6 +411,11 @@ public class PoseEstimator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if (Time.frameCount % 15 != 0)
+        //{
+        //    return;
+        //}
+
         // Copy webcamTexture to videoTexture if using webcam
         if (useWebcam) Graphics.Blit(webcamTexture, videoTexture);
 

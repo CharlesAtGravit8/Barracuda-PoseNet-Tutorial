@@ -195,11 +195,13 @@ public class PoseSkeleton
             {
                 // Activate the current key point GameObject
                 this.keypoints[k].GetComponent<MeshRenderer>().enabled = true;
+                keypoints[k].active = true;
             }
             else
             {
                 // Deactivate the current key point GameObject
                 this.keypoints[k].GetComponent<MeshRenderer>().enabled = false;
+                keypoints[k].active = false;
             }
 
             // Scale the keypoint position to the original resolution
